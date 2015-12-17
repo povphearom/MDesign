@@ -3,8 +3,7 @@ package com.example.phearom.mdesign.UI.model;
 import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
-import com.example.phearom.mdesign.R;
-import com.squareup.picasso.Picasso;
+import com.koushikdutta.ion.Ion;
 
 public class User
 {
@@ -58,9 +57,6 @@ public class User
 
     @BindingAdapter({"bind:imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
-        Picasso.with(view.getContext())
-                .load(imageUrl).centerCrop().fit()
-                .placeholder(R.mipmap.ic_launcher)
-                .into(view);
+        Ion.with(view.getContext()).load(imageUrl).intoImageView(view);
     }
 }
