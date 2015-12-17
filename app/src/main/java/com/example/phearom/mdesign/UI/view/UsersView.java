@@ -1,7 +1,9 @@
 package com.example.phearom.mdesign.UI.view;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -50,6 +52,15 @@ public class UsersView extends AppCompatActivity
     }
 
     private void loadData(){
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) binding.getView().findViewById(R.id.swl_Loading);
+        swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.MAGENTA, Color.BLUE, Color.MAGENTA, Color.BLACK, Color.CYAN, Color.DKGRAY, Color.LTGRAY);
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setEnabled(true);
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
         Ion.with(this).load(URL_SERVER).asString().setCallback(new FutureCallback<String>() {
             @Override
             public void onCompleted(Exception e, String result) {
@@ -67,7 +78,11 @@ public class UsersView extends AppCompatActivity
                             usersViewModel.users.add(new UserViewModel(new User(String.valueOf(rank),population,country,flag)));
                         }
                     }
+                    swipeRefreshLayout.setEnabled(false);
+                    swipeRefreshLayout.setRefreshing(false);
                 } catch (Exception e1) {
+                    swipeRefreshLayout.setEnabled(false);
+                    swipeRefreshLayout.setRefreshing(false);
                     e1.printStackTrace();
                 }
             }

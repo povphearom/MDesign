@@ -13,21 +13,29 @@
             type="com.example.phearom.mdesign.UI.view.UsersView"/>
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:id="@+id/swl_Loading"
+            >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/activity_users_recycler"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             app:items="@{usersViewModel.users}"
             app:itemViewBinder="@{view.itemViewBinder}"
             app:clickHandler="@{view.clickHandler}"
             app:longClickHandler="@{view.longClickHandler}"
             />
-    </LinearLayout>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </FrameLayout>
 </layout>
