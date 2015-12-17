@@ -29,33 +29,5 @@
             app:clickHandler="@{view.clickHandler}"
             app:longClickHandler="@{view.longClickHandler}"
             />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:id="@+id/users_view_firstname"/>
-            />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:id="@+id/users_view_lastname"/>
-
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Add"
-                android:clickable="true"
-                app:onClickListener="@{view.onButtonClick}"/>
-        </LinearLayout>
     </LinearLayout>
 </layout>

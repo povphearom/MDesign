@@ -1,33 +1,66 @@
 package com.example.phearom.mdesign.UI.model;
 
+import android.databinding.BindingAdapter;
+import android.widget.ImageView;
+
+import com.example.phearom.mdesign.R;
+import com.squareup.picasso.Picasso;
+
 public class User
 {
-    private  String firstName;
-    private  String lastName;
+    private String rank;
+    private String population;
+    private  String country;
+    private  String imageUrl;
 
-    public User(String firstname, String lastname)
-    {
-        this.firstName = firstname;
-        this.lastName = lastname;
+    public User(String rank, String population, String country, String flag) {
+        this.rank = rank;
+        this.population = population;
+        this.country = country;
+        this.imageUrl = flag;
     }
 
-    public String getFirstName()
-    {
-        return firstName;
+    public String getRank() {
+        return rank;
     }
 
-    public void setFirstName(String firstName)
-    {
-        this.firstName = firstName;
+    public void setRank(String rank) {
+        this.rank = rank;
     }
 
-    public String getLastName()
-    {
-        return lastName;
+    public String getPopulation() {
+        return population;
     }
 
-    public void setLastName(String lastName)
+    public void setPopulation(String population) {
+        this.population = population;
+    }
+
+    public String getCountry()
     {
-        this.lastName = lastName;
+        return country;
+    }
+
+    public void setCountry(String country)
+    {
+        this.country = country;
+    }
+
+    public String getImageUrl()
+    {
+        return this.imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl)
+    {
+        this.imageUrl = imageUrl;
+    }
+
+    @BindingAdapter({"bind:imageUrl"})
+    public static void loadImage(ImageView view, String imageUrl) {
+        Picasso.with(view.getContext())
+                .load(imageUrl).centerCrop().fit()
+                .placeholder(R.mipmap.ic_launcher)
+                .into(view);
     }
 }

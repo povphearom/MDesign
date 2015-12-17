@@ -9,7 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
+import com.example.phearom.mdesign.R;
 import com.example.phearom.mdesign.adapter.binder.ItemBinder;
 import com.example.phearom.mdesign.listener.ClickHandler;
 import com.example.phearom.mdesign.listener.LongClickHandler;
@@ -26,6 +29,7 @@ public class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingR
     private LayoutInflater inflater;
     private ClickHandler<T> clickHandler;
     private LongClickHandler<T> longClickHandler;
+    private int lastPosition = -1;
 
     public BindingRecyclerViewAdapter(ItemBinder<T> itemBinder, @Nullable Collection<T> items)
     {
@@ -100,6 +104,19 @@ public class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingR
         viewHolder.binding.getRoot().setOnClickListener(this);
         viewHolder.binding.getRoot().setOnLongClickListener(this);
         viewHolder.binding.executePendingBindings();
+
+        setAnimation(viewHolder.itemView,position);
+    }
+
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), R.anim.anim_in_up);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override

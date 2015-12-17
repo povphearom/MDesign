@@ -16,9 +16,9 @@ public class UsersViewModel extends BaseObservable
         this.users = new ObservableArrayList<>();
     }
 
-    public void addUser(String name, String surname)
+    public void addUser(String rank,String population,String country, String image)
     {
-        this.users.add(new UserViewModel(new User(name, surname)));
+        this.users.add(new UserViewModel(new User(rank,population,country,image)));
     }
 
 }

@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/item_user_name"
-            android:text='@{String.format("%s &amp; %s", user.firstName, user.group)}'
+            android:text='@{String.format("%s &amp; %s", user.country, user.group)}'
             tools:text="Hello"/>
 
         <TextView
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/item_user_surname"
-            android:text="@{user.lastName}"
+            android:text="@{user.country}"
             tools:text="World"
             />
     </LinearLayout>

@@ -2,12 +2,9 @@ package com.example.phearom.mdesign.UI.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.Editable;
-import android.view.View;
-import android.widget.EditText;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.phearom.mdesign.BR;
@@ -15,7 +12,6 @@ import com.example.phearom.mdesign.R;
 import com.example.phearom.mdesign.UI.binder.SuperUserBinder;
 import com.example.phearom.mdesign.UI.binder.UserBinder;
 import com.example.phearom.mdesign.UI.model.User;
-import com.example.phearom.mdesign.UI.viewmodel.SuperUserViewModel;
 import com.example.phearom.mdesign.UI.viewmodel.UserViewModel;
 import com.example.phearom.mdesign.UI.viewmodel.UsersViewModel;
 import com.example.phearom.mdesign.adapter.binder.CompositeItemBinder;
@@ -23,42 +19,59 @@ import com.example.phearom.mdesign.adapter.binder.ItemBinder;
 import com.example.phearom.mdesign.databinding.UsersViewBinding;
 import com.example.phearom.mdesign.listener.ClickHandler;
 import com.example.phearom.mdesign.listener.LongClickHandler;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class UsersView extends AppCompatActivity
 {
+//    private String URL_SERVER = "http://www.androidbegin.com/tutorial/jsonparsetutorial.txt";
+    private String URL_SERVER = "https://raw.githubusercontent.com/abhijaju/Test-Collection-for-Image-Search-Result-Diversity-in-Flickr/master/queries/argos/query_data.json";
+
     private UsersViewModel usersViewModel;
     private UsersViewBinding binding;
 
-    @Nullable
-    private static String getStringFromEditText(EditText editText)
-    {
-        Editable editable = editText.getText();
-        return editable == null ? null : editable.toString();
-    }
-
+//    private int[] mImages = {R.drawable.p1,R.drawable.p2,R.drawable.p3,R.drawable.p4,R.drawable.p5,R.drawable.p6};
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         usersViewModel = new UsersViewModel();
-        usersViewModel.users.add(new SuperUserViewModel(new User("Android", "Dev")));
+//        usersViewModel.users.add(new SuperUserViewModel(new User("Android", R.drawable.p2)));
 
         binding = DataBindingUtil.setContentView(this, R.layout.users_view);
         binding.setUsersViewModel(usersViewModel);
         binding.setView(this);
         binding.activityUsersRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        loadData();
     }
 
-    public View.OnClickListener onButtonClick()
-    {
-        return new View.OnClickListener()
-        {
+    private void loadData(){
+        Ion.with(this).load(URL_SERVER).asString().setCallback(new FutureCallback<String>() {
             @Override
-            public void onClick(View v)
-            {
-                usersViewModel.addUser(getStringFromEditText(binding.usersViewFirstname), getStringFromEditText(binding.usersViewLastname));
+            public void onCompleted(Exception e, String result) {
+                try {
+                    Log.i("Data", result);
+                    JSONObject data = new JSONObject(result);
+                    JSONArray array = data.getJSONArray("data");
+                    if (array.length() > 0){
+                        for (int i=0 ;i< array.length();i++){
+                            JSONObject json = array.getJSONObject(i);
+                            int rank = json.getInt("id");
+                            String country= json.getJSONObject("photo_metadata").getString("title");
+                            String population= json.getJSONObject("photo_owner").getString("owner");
+                            String flag = json.getString("photo_physical");
+                            usersViewModel.users.add(new UserViewModel(new User(String.valueOf(rank),population,country,flag)));
+                        }
+                    }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
             }
-        };
+        });
     }
 
     public ClickHandler<UserViewModel> clickHandler()
@@ -68,7 +81,7 @@ public class UsersView extends AppCompatActivity
             @Override
             public void onClick(UserViewModel user)
             {
-                Toast.makeText(UsersView.this, user.getFirstName() + " " + user.getLastName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(UsersView.this, user.getCountry() + " : " + user.getPopulation(), Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -80,7 +93,7 @@ public class UsersView extends AppCompatActivity
             @Override
             public void onLongClick(UserViewModel user)
             {
-                Toast.makeText(UsersView.this, "LONG CLICK: " + user.getFirstName() + " " + user.getLastName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(UsersView.this, "LONG CLICK: " + user.getCountry() + " " + user.getPopulation(), Toast.LENGTH_SHORT).show();
             }
         };
     }

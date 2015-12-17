@@ -13,18 +13,25 @@ public class UserViewModel extends BaseObservable
         this.model = model;
     }
 
-    public User getModel()
-    {
+    public User getModel() {
         return model;
     }
 
-    public String getFirstName()
+    public String getCountry()
     {
-        return model.getFirstName();
+        return model.getCountry();
     }
 
-    public String getLastName()
+    public String getImageUrl()
     {
-        return model.getLastName();
+        return model.getImageUrl();
+    }
+
+    public String getRank(){
+        return model.getRank();
+    }
+
+    public String getPopulation(){
+        return model.getPopulation();
     }
 }
