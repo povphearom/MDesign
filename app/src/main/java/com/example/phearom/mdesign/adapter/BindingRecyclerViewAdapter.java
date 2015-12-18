@@ -105,7 +105,7 @@ public class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter<BindingR
         viewHolder.binding.getRoot().setOnLongClickListener(this);
         viewHolder.binding.executePendingBindings();
 
-        setAnimation(viewHolder.itemView,position);
+//        setAnimation(viewHolder.itemView,position);
     }
 
     private void setAnimation(View viewToAnimate, int position)

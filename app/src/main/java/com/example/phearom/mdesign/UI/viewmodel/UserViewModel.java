@@ -1,6 +1,7 @@
 package com.example.phearom.mdesign.UI.viewmodel;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 
 import com.example.phearom.mdesign.UI.model.User;
 
@@ -33,5 +34,10 @@ public class UserViewModel extends BaseObservable
 
     public String getPopulation(){
         return model.getPopulation();
+    }
+
+    @Bindable
+    public boolean isLoading(){
+        return model.isLoading();
     }
 }

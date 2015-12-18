@@ -6,19 +6,16 @@ import android.databinding.ObservableArrayList;
 
 import com.example.phearom.mdesign.UI.model.User;
 
-public class UsersViewModel extends BaseObservable
-{
+public class UsersViewModel extends BaseObservable {
+
     @Bindable
     public ObservableArrayList<UserViewModel> users;
 
-    public UsersViewModel()
-    {
+    public UsersViewModel() {
         this.users = new ObservableArrayList<>();
     }
 
-    public void addUser(String rank,String population,String country, String image)
-    {
-        this.users.add(new UserViewModel(new User(rank,population,country,image)));
+    public void addUser(String rank, String population, String country, String image) {
+        this.users.add(new UserViewModel(new User(rank, population, country, image)));
     }
-
 }

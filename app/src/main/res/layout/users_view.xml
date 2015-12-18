@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View"/>
 
         <variable
             name="usersViewModel"
@@ -16,26 +19,75 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context="com.example.phearom.mdesign.UI.UsersView"
         android:orientation="vertical">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:id="@+id/swl_Loading"
-            >
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/activity_users_recycler"
-            android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:items="@{usersViewModel.users}"
-            app:itemViewBinder="@{view.itemViewBinder}"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:scrollbars="vertical"
             app:clickHandler="@{view.clickHandler}"
+            app:itemViewBinder="@{view.itemViewBinder}"
+            app:items="@{usersViewModel.users}"
             app:longClickHandler="@{view.longClickHandler}"
             />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        <LinearLayout
+            android:id="@+id/contentError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Error data loading"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#ff0000"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                style="?android:attr/selectableItemBackgroundBorderless"
+                android:text="Reload"
+                android:onClick="reload"
+                android:textColor="@color/colorPrimary"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+
+        <ProgressBar
+            android:id="@+id/activity_users_progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/ripple"
+            android:elevation="10dp"
+            android:padding="4dp"
+            android:visibility="gone"/>
+
     </FrameLayout>
 </layout>
