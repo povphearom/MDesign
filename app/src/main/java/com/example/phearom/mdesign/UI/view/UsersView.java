@@ -2,12 +2,13 @@ package com.example.phearom.mdesign.UI.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -32,14 +33,14 @@ import com.koushikdutta.ion.Ion;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class UsersView extends AppCompatActivity {
+public class UsersView extends Fragment {
     private UsersViewModel usersViewModel;
     private UsersViewBinding mBinding;
 
     private void setLoading(int loading) {
         if (null == mBinding) return;
 
-        switch (loading){
+        switch (loading) {
             case 0:
                 mBinding.activityUsersProgressbar.setVisibility(View.VISIBLE);
                 mBinding.contentError.setVisibility(View.GONE);
@@ -56,28 +57,29 @@ public class UsersView extends AppCompatActivity {
         }
     }
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         usersViewModel = new UsersViewModel();
 
-        mBinding = DataBindingUtil.setContentView(this, R.layout.users_view);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.users_view, container, false);
         mBinding.setUsersViewModel(usersViewModel);
         mBinding.setView(this);
-        mBinding.activityUsersRecycler.setLayoutManager(new LinearLayoutManager(this));
-
-        setSupportActionBar(mBinding.toolbar);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
+        mBinding.activityUsersRecycler.setLayoutManager(layoutManager);
 
         loadData();
+        return mBinding.getRoot();
     }
 
-    public void reload(View v){
+    public void reload(View v) {
         loadData();
     }
 
     public void loadData() {
         setLoading(0);
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ServerUtil.URL_SERVER,
                 new Response.Listener<String>() {
                     @Override
@@ -117,7 +119,7 @@ public class UsersView extends AppCompatActivity {
         return new ClickHandler<UserViewModel>() {
             @Override
             public void onClick(UserViewModel user) {
-                Toast.makeText(UsersView.this, user.getCountry() + " : " + user.getPopulation(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), user.getCountry() + " : " + user.getPopulation(), Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -126,49 +128,26 @@ public class UsersView extends AppCompatActivity {
         return new LongClickHandler<UserViewModel>() {
             @Override
             public void onLongClick(UserViewModel user) {
-                Toast.makeText(UsersView.this, "LONG CLICK: " + user.getCountry() + " " + user.getPopulation(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "LONG CLICK: " + user.getCountry() + " " + user.getPopulation(), Toast.LENGTH_SHORT).show();
             }
         };
     }
 
     public ItemBinder<UserViewModel> itemViewBinder() {
-//        new SuperUserBinder(BR.user, R.layout.item_super_user),
         return new CompositeItemBinder<UserViewModel>(
                 new UserBinder(BR.user, R.layout.item_user)
         );
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onLowMemory() {
         super.onLowMemory();
-        Ion.getDefault(this).getBitmapCache().clear();
+        Ion.getDefault(getActivity()).getBitmapCache().clear();
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
-        Ion.getDefault(this).cancelAll();
+        Ion.getDefault(getActivity()).cancelAll();
     }
 }
